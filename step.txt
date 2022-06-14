@@ -1,0 +1,29 @@
+npm init -y : Initialisation
+créer un fichier .env pour les variables d'environnement
+créer l'application express dans server.js
+créer la base du sevreur
+créer la base de donnée
+connecter le server et la base de données
+
+créer les models:
+    créer Schema avec "mongoose.Schema({})"
+    => crypter le mot de passe avec "bcrypt.hash()"
+    créer avec "mongoose.model(nomTable,Schema)"
+
+créer les controllers: exporter toutes les requetes
+
+créer les routes
+
+ajouter les routes au server
+
+Création du système d'authentification:
+    Connexion
+    - Récupérer les données pour login (pseudo/email + password(comparé avec bcrypt))
+    - Créer un token avec jwt.sing({id}, clé, expiration)
+    - Créer un cookie avec res.cookie('jwt', token, {httpOnly: true, maxAge})
+    Déconnexion
+    - Créer un cookie vide res.cookie('jwt','', {maxAge:1})
+    - Redirect
+
+    Verifier utilisateur
+    -

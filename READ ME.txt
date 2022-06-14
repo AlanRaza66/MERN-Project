@@ -1,0 +1,9 @@
+Config: pour toutes les configurations
+server.js: serveur
+dotenv: permet de stocker des variables d'environnement dans le fichier ".env"
+db.js : base de donnée (avec mongoose si mongodb)
+model : structure des tables
+controllers: requete
+route: route pour l'api
+bodyParser: permet d'encoder la data
+patch: modifie juste, tandis que put ecrase
