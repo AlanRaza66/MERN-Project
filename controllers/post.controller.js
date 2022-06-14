@@ -32,7 +32,7 @@ module.exports.updatePost = async (req, res) => {
   };
 
   PostModel.findOneAndUpdate(
-    req.params.id,
+    { _id: req.params.id },
     {
       $set: updateRecord,
     },
@@ -45,4 +45,75 @@ module.exports.updatePost = async (req, res) => {
     }
   );
 };
-module.exports.deletePost = (req, res) => {};
+module.exports.deletePost = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown :" + req.params.id);
+  try {
+    PostModel.remove({
+      _id: req.params.id,
+    }).exec();
+    return res.status(200).json({ message: "Post successfully deleted" });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+module.exports.likePost = (req, res) => {
+  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.id))
+    return res.status(400).send("ID unknown :" + req.params.id);
+
+  try {
+    PostModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: { likers: req.body.id },
+      },
+      { new: true },
+      (err, docs) => {
+        if (err) res.status(400).send(err);
+      }
+    );
+    UserModel.findByIdAndUpdate(
+      req.body.id,
+      {
+        $addToSet: { likes: req.params.id },
+      },
+      { new: true },
+      (err, docs) => {
+        if (!err) res.status(200).json(docs);
+        else res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+};
+module.exports.unlikePost = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.id))
+    return res.status(400).send("ID unknown :" + req.params.id);
+  try {
+    PostModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { likers: req.body.id },
+      },
+      { new: true },
+      (err, docs) => {
+        if (err) res.status(400).send(err);
+      }
+    );
+    UserModel.findByIdAndUpdate(
+      req.body.id,
+      {
+        $pull: { likes: req.params.id },
+      },
+      { new: true },
+      (err, docs) => {
+        if (!err) res.status(200).json(docs);
+        else res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+};
