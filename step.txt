@@ -26,4 +26,5 @@ Création du système d'authentification:
     - Redirect
 
     Verifier utilisateur
-    -
+    - Prendre le cookie
+    - Decoder le token dans le cookie et recupérer l'ID
